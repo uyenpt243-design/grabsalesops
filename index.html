@@ -252,7 +252,7 @@ function num(v) {
 function normalizeRows(rows) {
   const d = { photoCoverage: [], conversionRate: [], retention: [], medianRating: [], medianReviews: [],
               promotionPct: [], adsPct: [], dailyOrders: [], aov: [], medianEarnings: [], marketingInvestment: [],
-              onlineMenuMarkup: [], selfServeAdoption: [] };
+              onlineMenuMarkup: [], selfServeAdoption: [], estRevenue: [] };
   rows.forEach(r => {
     d.conversionRate.push(num(r.ConversionRate));
     d.medianRating.push(num(r.MedianRating));
@@ -267,8 +267,8 @@ function normalizeRows(rows) {
     d.marketingInvestment.push(num(r["Merchant's Marketing Investment"] ?? r.MarketingInvestment));
     d.onlineMenuMarkup.push(num(r['Online Menu Price Mark-up'] ?? r.OnlineMenuMarkup));
     d.selfServeAdoption.push(num(r['Self-Serve Marketing Adoption'] ?? r.SelfServeAdoption));
+    d.estRevenue.push(num(r.EstDailyRev));
   });
-  d.estRevenue = d.dailyOrders.map((o,i) => +(o * d.aov[i]).toFixed(2));
   return d;
 }
 
@@ -420,7 +420,7 @@ function render() {
       scales: {
         x: { title: { display: true, text: 'GF Tenure (tháng)' }, grid: { display: false } },
         yLeft: { position: 'left', title: { display: true, text: 'Số review (median)' }, beginAtZero: true, ticks: { stepSize: 20 } },
-        yRight: { position: 'right', min: 3.5, max: 5, title: { display: true, text: 'Rating (median, /5)' }, grid: { drawOnChartArea: false }, ticks: { stepSize: 0.5 } }
+        yRight: { position: 'right', min: 0, max: 5, title: { display: true, text: 'Rating (median, /5)' }, grid: { drawOnChartArea: false }, ticks: { stepSize: 1 } }
       }
     }, idxMapForClick)
   });
@@ -498,7 +498,7 @@ function render() {
       scales: {
         x: { title: { display: true, text: 'GF Tenure (tháng)' }, grid: { display: false } },
         yLeft: { position: 'left', min: 0, max: 100, title: { display: true, text: '% Median earnings' }, ticks: { callback: v => v + '%' } },
-        yRight: { position: 'right', min: 90, max: 130, title: { display: true, text: '% Online menu mark-up' }, grid: { drawOnChartArea: false }, ticks: { callback: v => v + '%' } }
+        yRight: { position: 'right', min: 0, max: 140, title: { display: true, text: '% Online menu mark-up' }, grid: { drawOnChartArea: false }, ticks: { stepSize: 20, callback: v => v + '%' } }
       }
     }, idxMapForClick)
   });
